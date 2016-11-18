@@ -28,3 +28,11 @@ body {
 .liquidity-chart__y-axis text.zero {
     text-anchor: right;
 }
+
+.liquidity-chart__bars .desired {
+    fill: #2f4e72;
+}
+
+.liquidity-chart__bars .current {
+    fill: #29c6c6;
+}

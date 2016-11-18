@@ -4,24 +4,22 @@ import React, { Component } from 'react';
 
 import styles from './App.css';
 
-
-const Bar = ({className, label, x, y, width, height}) => {
-
+const Bar = ({cssRule, label, x, y, width, height}) => {
+    const barHtml = `
+        <rect
+            class=${cssRule}
+            x=${x}
+            y=${y}
+            width=${width}
+            height=${height}
+        />
+        <text
+            x=${x - 10}
+            y=${y - 5}>
+            <tspan>${label}</tspan>
+        </text>`;
     return (
-        <g>
-            <rect
-                className={className}
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-            />
-            <text
-                x={x - 10}
-                y={y - height - 3}>
-                <tspan>{label}</tspan>
-            </text>
-        </g>
+        <g dangerouslySetInnerHTML={{ __html: barHtml }}></g>
     )
 }
 
@@ -38,21 +36,28 @@ Bar.defaultProps = {
 }
 
 
-const Bars = ({desiredAmount, currentAmount, y}) => {
+const Bars = ({desiredAmount, currentAmount, axisValues, axisSpacing}) => {
 
     const desiredBarHeight = desiredAmount / 1000 ;
     const currentBarHeight = currentAmount / 1000 ;
 
+
+    const y = axisValues
+        .map((y, i) => ({
+            y: (i+1)*axisSpacing,
+            value: y
+        })).filter(axisLine => axisLine.value === '0')[0].y;
+
     return (
         <g className="liquidity-chart__bars">
             <Bar
-                className={'desired'}
+                cssRule={'desired'}
                 label={desiredAmount.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                 x={75}
                 y={y - desiredBarHeight}
                 height={desiredBarHeight} />
             <Bar
-                className={'current'}
+                cssRule={'current'}
                 label={currentAmount.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                 x={175}
                 y={y - currentBarHeight}
@@ -62,57 +67,81 @@ const Bars = ({desiredAmount, currentAmount, y}) => {
     );
 }
 
-const Grid = ({lines, axisSpacing}) => (
-    <g className="liquidity-chart__grid">
-      {
-        lines.map((axisLine, i) => {
-            const lineStyle = {
-                stroke: i === 0 || i === lines.length-1  ? '#000000' : '#efefef',
-                'stroke-dasharray': axisLine.value === '0' ? 1 : null
-            };
-            const lineLabelStyle = {
-                'text-anchor': 'end'
-            }
-            return (
-                <g className="liquidity-chart__grid-line" key={`liquidity-chart__grid-line-${i}`}>
-                    <line
-                        x1={axisLine.start.x}
-                        y1={axisLine.start.y}
-                        x2={axisLine.end.x}
-                        y2={axisLine.end.y}
-                        style={lineStyle}
-                    />
-                    <text
-                        x={axisLine.end.x}
-                        y={i*axisSpacing - 5}
-                        width="40">
-                        <tspan style={lineLabelStyle}>{axisLine.label}</tspan>
-                    </text>
-                </g>
-            )
-        })
-      }
-    </g>
-)
+Bars.propTypes = {
+    axisValues: React.PropTypes.array,
+    axisSpacing: React.PropTypes.number
+}
 
-const Chart = ({id, desiredAmount, currentAmount, width, height, currencySign, axisValues, axisSpacing}) => {
+Bars.defaultProps = {
+    axisSpacing: 25,
+    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T']
+}
 
-    const axisLength = width;
+
+const Grid = ({width, axisValues, axisSpacing, currencySign}) => {
     const lines =  axisValues.map((y, i) => (
             {
-                start: { x: 0, y: i*axisSpacing},
-                end: { x: axisLength, y: i*axisSpacing},
+                start: { x: 0, y: (i+1)*axisSpacing},
+                end: { x: width, y: (i+1)*axisSpacing},
                 value: y,
                 label: `${y} ${currencySign}`
             }
         )
     )
     return (
+        <g className="liquidity-chart__grid">
+          {
+            lines.map((axisLine, i) => {
+                const lineStyle = {
+                    stroke: i === 0 || i === lines.length-1  ? '#000000' : '#efefef',
+                    'stroke-dasharray': axisLine.value === '0' ? 1 : null
+                };
+                const lineLabelStyle = {
+                    'text-anchor': 'end'
+                }
+                return (
+                    <g className="liquidity-chart__grid-line" key={`liquidity-chart__grid-line-${i}`}>
+                        <line
+                            x1={axisLine.start.x}
+                            y1={axisLine.start.y}
+                            x2={axisLine.end.x}
+                            y2={axisLine.end.y}
+                            style={lineStyle}
+                        />
+                        <text
+                            x={axisLine.end.x}
+                            y={axisLine.start.y - 5}
+                            width="40">
+                            <tspan style={lineLabelStyle}>{axisLine.label}</tspan>
+                        </text>
+                    </g>
+                )
+            })
+          }
+        </g>
+    )
+}
+
+Grid.propTypes = {
+    width: React.PropTypes.number,
+    axisValues: React.PropTypes.array,
+    axisSpacing: React.PropTypes.number,
+    currencySign: React.PropTypes.string
+}
+
+Grid.defaultProps = {
+    width: 300,
+    axisSpacing: 25,
+    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T'],
+    currencySign: '€'
+}
+
+
+const Chart = ({id, bars, width, height}) => {
+
+    return (
         <svg className={id} height={height} width={width}>
-            <Grid lines={lines} axisSpacing={axisSpacing} />
-            <Bars desiredAmount={desiredAmount}
-                currentAmount={currentAmount}
-                y={lines.filter(axisLine => axisLine.value === '0')[0].start.y}/>
+            <Grid />
         </svg>
     )
   }
@@ -120,28 +149,22 @@ const Chart = ({id, desiredAmount, currentAmount, width, height, currencySign, a
 Chart.propTypes = {
     id: React.PropTypes.string,
     width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    desiredAmount: React.PropTypes.number,
-    currentAmount: React.PropTypes.number,
-    currencySign: React.PropTypes.string,
-    axisValues: React.PropTypes.array,
-    axisSpacing: React.PropTypes.number
+    height: React.PropTypes.number
 }
 
 
 Chart.defaultProps = {
     width: 300,
-    height: 150,
-    currencySign: '€',
-    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T'],
-    axisSpacing: 25
+    height: 200
 }
 
 
-const App = () => (
-    <div className="placeholder">
-        <Chart id="liquidity-chart" desiredAmount={6000} currentAmount={1234.56} />
-    </div>
-)
-
+const App = () => {
+    const chartBars  = <Bars desiredAmount={desiredAmount} currentAmount={currentAmount} />
+    return (
+        <div className="placeholder">
+            <Chart id="liquidity-chart" desiredAmount={40000} currentAmount={1234.56} bars={chartBars}/>
+        </div>
+    )
+}
 export default App;
