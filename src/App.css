@@ -1,0 +1,30 @@
+body {
+    /*background-color: blue;*/
+}
+
+.placeholder {
+    height:30px;
+    width: 150px;
+}
+.liquidity-chart {
+    /*height:100%;
+    width: 100%;*/
+    pointer-events: none; /* so that you can resize the element */
+    display: block;
+    position: relative;
+    background: url("./img/graph-background-image.png") no-repeat center center;
+    font-family: "Verdana";
+    font-size: 10px;
+}
+
+.liquidity-chart__grid {
+    background-color: green;
+}
+
+.liquidity-chart__y-axis text {
+    text-anchor: left;
+}
+
+.liquidity-chart__y-axis text.zero {
+    text-anchor: right;
+}
