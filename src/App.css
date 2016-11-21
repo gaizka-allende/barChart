@@ -1,14 +1,15 @@
 body {
-    /*background-color: blue;*/
 }
 
-.placeholder {
-    height:30px;
-    width: 150px;
+.charts {
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row;
+   flex-direction: row;
 }
-.liquidity-chart {
-    /*height:100%;
-    width: 100%;*/
+
+.chart {
+    flex: 1;
     pointer-events: none; /* so that you can resize the element */
     display: block;
     position: relative;
@@ -17,22 +18,46 @@ body {
     font-size: 10px;
 }
 
-.liquidity-chart__grid {
+.char__line-dark {
+    stroke: #000000;
+}
+
+.char__line-light {
+    stroke: #efefef;
+}
+
+.char__line-dotted {
+    stroke-dasharray: 1, 1;
+}
+
+.chart__grid {
     background-color: green;
 }
 
-.liquidity-chart__y-axis text {
+.chart__y-axis text {
     text-anchor: left;
 }
 
-.liquidity-chart__y-axis text.zero {
+.chart__y-axis text.zero {
     text-anchor: right;
 }
 
-.liquidity-chart__bars .desired {
+.chart rect.chart__bar-negative {
+    fill: red;
+}
+
+.chart .chart__bar-desired {
     fill: #2f4e72;
 }
 
-.liquidity-chart__bars .current {
+.chart .chart__bar-current {
     fill: #29c6c6;
+}
+
+.chart__bar-stacked-1 {
+    fill: #29c6c6;
+}
+
+.chart__bar-stacked-2 {
+    fill: #91e2dd;
 }
