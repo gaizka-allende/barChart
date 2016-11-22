@@ -6,6 +6,7 @@ import styles from './App.css';
 
 const Bar = ({css, value, x, zeroYCoordinate, width, locale, currency, labelPosition, labelHeight, labelFont}) => {
     const height = Math.abs(value) / 1000;
+    const barXCoordinate =  x - width/2;
     const barYCoordinate = value > 0 ? zeroYCoordinate - height : zeroYCoordinate;
     const localeValue = value.toLocaleString(locale, { style: 'currency', currency: currency });
     const textMetrics = ((str) => {
@@ -89,13 +90,13 @@ const Grid = ({width, axisValues, axisSpacing, currencySign}) => {
         )
     )
     return (
-        <g className="liquidity-chart__grid">
+        <g className="chart__grid">
           {
             lines.map((axisLine, i) => {
                 let lineCSS;
                 lineCSS = i === 0 || i === lines.length-1 || axisLine.value === '0'
-                    ? 'char__line-dark' : 'char__line-light';
-                if (axisLine.value === '0') lineCSS = lineCSS + ' char__line-dotted';
+                    ? 'chart__line-dark' : 'chart__line-light';
+                if (axisLine.value === '0') lineCSS = lineCSS + ' chart__line-dotted';
 
                 const lineLabelStyle = `text-anchor: end`
                 const gridLineInnerHtml = `<line
@@ -112,8 +113,8 @@ const Grid = ({width, axisValues, axisSpacing, currencySign}) => {
                         <tspan style="${lineLabelStyle}">${axisLine.label}</tspan>
                     </text>`;
                 return (
-                    <g className="liquidity-chart__grid-line"
-                        key={`liquidity-chart__grid-line-${i}`}
+                    <g className="chart_line"
+                        key={`chart_line-${i}`}
                         dangerouslySetInnerHTML={ { __html: gridLineInnerHtml }}>
                     </g>
                 )
@@ -132,83 +133,73 @@ Grid.propTypes = {
 
 Grid.defaultProps = {
     width: 300,
-    currencySign: '€'
+    currencySign: '€',
+    axisSpacing: 25,
+    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T']
 }
 
-const App = ({width, height, axisValues, axisSpacing, barWidth}) => {
 
-    const zeroYCoordinate = axisValues
+const Chart = ({css, width, height, children}) => {
+    const viewBox = `0 0 ${width} ${height}`;
+    const grid = <Grid />;
+    const zeroYCoordinate = grid.props.axisValues
         .map((y, i) => ({
-            y: (i+1)*axisSpacing,
+            y: (i+1)*grid.props.axisSpacing,
             value: y
         }))
         .filter(axisLine => axisLine.value === '0')[0].y;
+    const nestedBars = Array.isArray(children) ? children : [children];
+    const bars = <g>{
+                    nestedBars.map( (childComponent,i) => {
+                        const x = width * childComponent.props.place;
+                        const props = { ...childComponent.props, zeroYCoordinate, x, key: `chart-bar-${i}` };
+                        return <childComponent.type {...props} />
+                    } )
+                }</g>;
+    return (
+        <svg className={`chart ${css}`} viewBox={viewBox}>
+            {grid}
+            {bars}
+        </svg>
+    )
+}
 
-    const viewBox = `0 0 ${width} ${height}`;
+Chart.propTypes = {
+    css: React.PropTypes.string,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number
+}
+
+
+Chart.defaultProps = {
+    width: 300,
+    height: 200
+}
+
+const App = () => {
+
+    const width = 300;
 
     return (
         <div className="charts">
-            <svg className="chart liquidity-chart" viewBox={viewBox}>
-                <Grid axisValues={axisValues} axisSpacing={axisSpacing}/>
-                <g>
-                    <Bar
-                        css={'chart__bar-desired'}
-                        value={46000}
-                        x={width / 3 - barWidth / 2}
-                        zeroYCoordinate={zeroYCoordinate} />
-                    <Bar
-                        css={'chart__bar-current'}
-                        value={12234.56}
-                        x={(width / 3)*2 - barWidth / 2}
-                        zeroYCoordinate={zeroYCoordinate} />
-                </g>
-            </svg>
-            <svg className="chart liquidity-chart" viewBox={viewBox}>
-                <Grid axisValues={axisValues} axisSpacing={axisSpacing}/>
-                <g>
-                    <Bar
-                        css={'chart__bar-desired'}
-                        value={56874.25}
-                        x={width / 3 - barWidth / 2}
-                        zeroYCoordinate={zeroYCoordinate} />
-                    <StackedBars
-                            x={(width / 3)*2 - barWidth / 2}
-                            zeroYCoordinate={zeroYCoordinate}>
+            <Chart css="liquidity">
+                <Bar css={'chart__bar-desired'} value={46000} place={1/3} />
+                <Bar css={'chart__bar-current'} value={12234.56} place={2/3} />
+            </Chart>
+            <Chart css="protection">
+                    <Bar css={'chart__bar-desired'} value={56874.25} place={1/3} />
+                    <StackedBars place={2/3} >
                         <Bar css={'chart__bar-stacked-1'} value={38778} />
                         <Bar css={'chart__bar-stacked-2'} value={9503.68} labelPosition="bottom"/>
                     </StackedBars>
-                </g>
-            </svg>
-            <svg className="chart liquidity-chart" viewBox={viewBox}>
-                <Grid axisValues={axisValues} axisSpacing={axisSpacing}/>
-                <g>
-                    <Bar
-                        css={'chart__bar-desired'}
-                        value={-8750.23}
-                        x={width / 2 - barWidth / 2}
-                        zeroYCoordinate={zeroYCoordinate} />
-                </g>
-            </svg>
+            </Chart>
+            <Chart css="growth">
+                <Bar css={'chart__bar-desired'} value={-8750.23} place={1/2} />
+            </Chart>
         </div>
     )
 }
 
-App.propTypes = {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    axisValues: React.PropTypes.array,
-    axisSpacing: React.PropTypes.number,
-    barWidth: React.PropTypes.number,
-}
-
-
-App.defaultProps = {
-    width: 300,
-    height: 200,
-    axisSpacing: 25,
-    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T'],
-    barWidth: 30,
-}
 
 
 export default App;

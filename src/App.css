@@ -18,15 +18,15 @@ body {
     font-size: 10px;
 }
 
-.char__line-dark {
+.chart__line-dark {
     stroke: #000000;
 }
 
-.char__line-light {
+.chart__line-light {
     stroke: #efefef;
 }
 
-.char__line-dotted {
+.chart__line-dotted {
     stroke-dasharray: 1, 1;
 }
 
