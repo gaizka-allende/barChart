@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 
 import styles from './App.css';
 
-const Bar = ({css, value, x, zeroYCoordinate, width, locale, currency, labelPosition, labelHeight, labelFont}) => {
-    const height = Math.abs(value) / 1000;
+const Bar = ({css, value, x, zeroYCoordinate, width, calculateHeight, locale, currency, labelPosition, labelHeight, labelFont}) => {
+    const height = calculateHeight(value);
     const barXCoordinate =  x - width/2;
     const barYCoordinate = value > 0 ? zeroYCoordinate - height : zeroYCoordinate;
     const localeValue = value.toLocaleString(locale, { style: 'currency', currency: currency });
@@ -50,11 +50,12 @@ Bar.propTypes = {
   x: React.PropTypes.number,
   zeroYCoordinate: React.PropTypes.number,
   width: React.PropTypes.number,
+  height: React.PropTypes.number,
   locale: React.PropTypes.string,
   currency: React.PropTypes.string,
   labelPosition: React.PropTypes.string,
   labelHeight: React.PropTypes.number,
-  labelFont: React.PropTypes.string,
+  labelFont: React.PropTypes.string
 };
 
 Bar.defaultProps = {
@@ -67,9 +68,11 @@ Bar.defaultProps = {
     labelFont: '11px Arial'
 }
 
-const StackedBars = ({x, zeroYCoordinate, children}) => {
-    const bars = children.map( (barComponent,i) => {
-        const props = { ...barComponent.props, x, zeroYCoordinate };
+const StackedBars = ({x, zeroYCoordinate, calculateHeight, children}) => {
+    const barChildren = Array.isArray(children) ? children : [children];
+    const bars = barChildren.map( (barComponent,i) => {
+        let props = { ...barComponent.props, x, zeroYCoordinate, calculateHeight };
+        if (i === barChildren.length-1 ) props.labelPosition = "bottom";
         return <Bar key={`stacked-bar-${i}`} {...props} />
     } )
     return (
@@ -132,19 +135,18 @@ Grid.propTypes = {
 }
 
 Grid.defaultProps = {
-    width: 300,
     currencySign: '€',
-    axisSpacing: 25,
-    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T']
 }
 
 
-const Chart = ({css, width, height, children}) => {
+const Chart = ({css, width, height, unit, yAxisValues, children}) => {
+    const calculateBarHeight = (barValue) => Math.abs(barValue) * yAxisSpacing/unit;
     const viewBox = `0 0 ${width} ${height}`;
-    const grid = <Grid />;
-    const zeroYCoordinate = grid.props.axisValues
+    const yAxisSpacing = height / yAxisValues.length;
+    const grid = <Grid width={width} axisValues={yAxisValues} axisSpacing={yAxisSpacing}/>;
+    const zeroYCoordinate = yAxisValues
         .map((y, i) => ({
-            y: (i+1)*grid.props.axisSpacing,
+            y: (i+1)*yAxisSpacing,
             value: y
         }))
         .filter(axisLine => axisLine.value === '0')[0].y;
@@ -152,7 +154,7 @@ const Chart = ({css, width, height, children}) => {
     const bars = <g>{
                     nestedBars.map( (childComponent,i) => {
                         const x = width * childComponent.props.place;
-                        const props = { ...childComponent.props, zeroYCoordinate, x, key: `chart-bar-${i}` };
+                        let props = { ...childComponent.props, zeroYCoordinate, x, calculateHeight: calculateBarHeight, key: `chart-bar-${i}` };
                         return <childComponent.type {...props} />
                     } )
                 }</g>;
@@ -173,12 +175,12 @@ Chart.propTypes = {
 
 Chart.defaultProps = {
     width: 300,
-    height: 200
+    height: 200,
+    yAxisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T'],
+    unit: 25000
 }
 
 const App = () => {
-
-    const width = 300;
 
     return (
         <div className="charts">
@@ -190,7 +192,7 @@ const App = () => {
                     <Bar css={'chart__bar-desired'} value={56874.25} place={1/3} />
                     <StackedBars place={2/3} >
                         <Bar css={'chart__bar-stacked-1'} value={38778} />
-                        <Bar css={'chart__bar-stacked-2'} value={9503.68} labelPosition="bottom"/>
+                        <Bar css={'chart__bar-stacked-2'} value={9503.68} />
                     </StackedBars>
             </Chart>
             <Chart css="growth">
