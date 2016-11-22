@@ -55,7 +55,8 @@ Bar.propTypes = {
   currency: React.PropTypes.string,
   labelPosition: React.PropTypes.string,
   labelHeight: React.PropTypes.number,
-  labelFont: React.PropTypes.string
+  labelFont: React.PropTypes.string,
+  calculateHeight: React.PropTypes.func
 };
 
 Bar.defaultProps = {
