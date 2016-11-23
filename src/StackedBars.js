@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import Bar from './Bar';
-
 const StackedBars = ({x, zeroYCoordinate, nestedBars}) => {
     const barChildren = Array.isArray(nestedBars) ? nestedBars : [nestedBars];
     const bars = barChildren.map( (barComponent,i) => {

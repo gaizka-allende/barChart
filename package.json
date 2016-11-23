@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Boilerplate for ReactJS project with hot code reloading",
   "scripts": {
-    "test": "npm run test:unit",
+    "test": "jest",
     "test:unit": "mocha ./test/ --require ./test/config/init.js --slow 120 --colors --sort --compilers js:babel-core/register --recursive"
   },
   "repository": {
@@ -30,6 +30,7 @@
   "devDependencies": {
     "babel-core": "^6.10.4",
     "babel-eslint": "^7.0.0",
+    "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.4",
     "babel-plugin-array-includes": "^2.0.3",
     "babel-plugin-syntax-trailing-function-commas": "6.8.0",
@@ -41,7 +42,7 @@
     "babel-plugin-transform-react-constant-elements": "6.9.1",
     "babel-plugin-transform-runtime": "6.12.0",
     "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-es2015": "^6.18.0",
     "babel-preset-es2016": "6.11.3",
     "babel-preset-react": "^6.16.0",
     "babel-register": "^6.9.0",
@@ -51,8 +52,10 @@
     "eslint-plugin-react": "^6.7.1",
     "express": "^4.14.0",
     "file-loader": "^0.9.0",
+    "jest": "^17.0.3",
     "jsdom": "^9.8.3",
     "mocha": "^3.1.2",
+    "react-test-renderer": "^15.4.1",
     "sinon": "^1.17.6",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3",
@@ -61,8 +64,10 @@
   },
   "dependencies": {
     "css-loader": "^0.25.0",
-    "react": "^15.4.0",
-    "react-dom": "^15.4.0",
+    "fbjs": "^0.8.6",
+    "object-assign": "^4.1.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
     "react-hot-loader": "^3.0.0-beta.6",
     "style-loader": "^0.13.1"
   }

@@ -30,6 +30,10 @@ body {
     stroke-dasharray: 1, 1;
 }
 
+.chart__line__label {
+    text-anchor: end;
+}
+
 .chart__grid {
     background-color: green;
 }

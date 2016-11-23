@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
 
-const Chart = ({css, width, height, unit, yAxisValues, locale, currency, barLabelFont, children}) => {
+const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currencySign, barLabelFont, children}) => {
     const calculateBarHeight = (barValue) => Math.abs(barValue) * yAxisSpacing/unit;
     const getTextWidth =  (str, font) => {
         const canvas = document.createElement('canvas');
@@ -11,7 +11,7 @@ const Chart = ({css, width, height, unit, yAxisValues, locale, currency, barLabe
     }
     const viewBox = `0 0 ${width} ${height}`;
     const yAxisSpacing = height / yAxisValues.length;
-    const grid = <Grid width={width} axisValues={yAxisValues} axisSpacing={yAxisSpacing}/>;
+    const grid = <Grid width={width} yAxisValues={yAxisValues} yAxisSpacing={yAxisSpacing} currencySign={currencySign}/>;
     const zeroYCoordinate = yAxisValues
         .map((y, i) => ({
             y: (i+1)*yAxisSpacing,
@@ -64,12 +64,12 @@ Chart.propTypes = {
 Chart.defaultProps = {
     locale: 'de-DE',
     currency: 'EUR',
+    currencySign: '€',
     width: 300,
     height: 200,
     yAxisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T'],
     unit: 25000,
     barLabelFont: '11px Arial'
-
 }
 
 export default Chart;

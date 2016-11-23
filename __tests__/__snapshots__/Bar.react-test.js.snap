@@ -1,0 +1,30 @@
+exports[`test Bar is rendered 1`] = `
+<g
+  className="chart__bar chart__bar-desired"
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "
+            <rect
+                class=\"chart__bar__rect \"
+                x=\"100\"
+                y=\"118.85714285714288\"
+                width=\"30\"
+                height=\"52.57142857142857\"
+            />
+            <g class=\"chart__bar__label\">
+                <rect
+                    x=\"83.445068359375\"
+                    y=\"103.85714285714288\"
+                    width=\"63.10986328125\"
+                    height=\"13\"
+                    fill=\"white\"
+                />
+                <text
+                    x=\"83.445068359375\"
+                    y=\"113.85714285714288\">
+                    <tspan>46.000,00 €</tspan>
+                </text>
+            </g>",
+    }
+  } />
+`;
