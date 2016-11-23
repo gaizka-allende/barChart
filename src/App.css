@@ -42,22 +42,22 @@ body {
     text-anchor: right;
 }
 
-.chart rect.chart__bar-negative {
+.chart > rect.chart__bar-negative {
     fill: red;
 }
 
-.chart .chart__bar-desired {
+.chart__bar-desired > rect {
     fill: #2f4e72;
 }
 
-.chart .chart__bar-current {
+.chart__bar-current > rect {
     fill: #29c6c6;
 }
 
-.chart__bar-stacked-1 {
+.chart__bar-stacked-1 > rect {
     fill: #29c6c6;
 }
 
-.chart__bar-stacked-2 {
+.chart__bar-stacked-2 > rect {
     fill: #91e2dd;
 }
