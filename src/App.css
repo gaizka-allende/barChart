@@ -42,7 +42,7 @@ body {
     text-anchor: right;
 }
 
-.chart > rect.chart__bar-negative {
+.chart__bar > rect.chart__bar-negative {
     fill: red;
 }
 

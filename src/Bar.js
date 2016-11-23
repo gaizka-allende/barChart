@@ -6,13 +6,13 @@ const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPos
     const labelXCoordinate = (x + width/2) - labelWidth/2;
     const barHtml = `
         <rect
-            class="${ value < 0 ? ' chart__bar-negative' : '' }"
+            class="chart__bar__rect ${ value < 0 ? ' chart__bar-negative' : '' }"
             x="${x}"
             y="${barYCoordinate}"
             width="${width}"
             height="${height}"
         />
-        <g>
+        <g class="chart__bar__label">
             <rect
                 x="${labelXCoordinate}"
                 y="${labelPosition === 'bottom' ? zeroYCoordinate + 5 : barYCoordinate - 15}"
@@ -27,7 +27,7 @@ const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPos
             </text>
         </g>`;
     return (
-        <g className={`chart ${css}`} dangerouslySetInnerHTML={{ __html: barHtml }}></g>
+        <g className={`chart__bar ${css}`} dangerouslySetInnerHTML={{ __html: barHtml }}></g>
     )
 }
 
