@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Boilerplate for ReactJS project with hot code reloading",
   "scripts": {
-    "start": "node server.js",
-    "lint": "eslint src"
+    "test": "npm run test:unit",
+    "test:unit": "mocha ./test/ --require ./test/config/init.js --slow 120 --colors --sort --compilers js:babel-core/register --recursive"
   },
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
     "express": "^4.14.0",
     "file-loader": "^0.9.0",
     "jsdom": "^9.8.3",
+    "mocha": "^3.1.2",
     "sinon": "^1.17.6",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3",
