@@ -18,24 +18,27 @@ body {
 }
 
 .chart-liquidity {
-    background: url("./img/graph-background-image.png") no-repeat center center;
+    background: url("./img/liquidity-graph-background-image.png") no-repeat center center;
+    background-size: auto 50%;
 }
 
 .chart-protection {
-    background: url("./img/graph-background-image.png") no-repeat center center;
+    background: url("./img/protection-graph-background-image.png") no-repeat center center;
+    background-size: auto 50%;
 }
 
 .chart-growth {
-    background: url("./img/graph-background-image.png") no-repeat center center;
+    background: url("./img/growth-graph-background-image.png") no-repeat center center;
+    background-size: auto 50%;
 }
 
 
 .chart__line-dark {
-    stroke: #000000;
+    stroke: #717782;
 }
 
 .chart__line-light {
-    stroke: #efefef;
+    stroke: #717782;
 }
 
 .chart__line-dotted {
@@ -44,6 +47,7 @@ body {
 
 .chart__line__label {
     text-anchor: end;
+    fill: #717782;
 }
 
 .chart__grid {
@@ -58,8 +62,8 @@ body {
     text-anchor: right;
 }
 
-.chart__bar > rect.chart__bar-negative {
-    fill: red;
+.chart__bar.chart__bar-negative > rect, .chart__bar.chart__bar-negative > g > text {
+    fill: #e20000;
 }
 
 .chart__bar-desired > rect {

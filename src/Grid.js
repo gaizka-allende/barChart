@@ -3,11 +3,9 @@ import React, { Component } from 'react';
 const Grid = ({width, yAxisValues, yAxisSpacing, currencySign}) => (
     <g className="chart__grid">
       {
-        yAxisValues.map((y, i) => {
+        yAxisValues.map((value, i) => {
             const start = { x: 0, y: (i+1)*yAxisSpacing};
             const end = { x: width, y: (i+1)*yAxisSpacing};
-            const value = y;
-            const label = `${y} ${currencySign}`;
             let css = i === 0 || i === yAxisValues.length-1 || value === '0'
                 ? 'chart__line-dark' : 'chart__line-light';
             if (value === '0') css = css + ' chart__line-dotted';
@@ -22,7 +20,7 @@ const Grid = ({width, yAxisValues, yAxisSpacing, currencySign}) => (
                     x="${end.x}"
                     y="${start.y - 5}"
                     width="40">
-                    <tspan class="chart__line__label">${label}</tspan>
+                    <tspan class="chart__line__label">${`${value} ${currencySign}`}</tspan>
                 </text>`;
             return (
                 <g className="chart__line"

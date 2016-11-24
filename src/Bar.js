@@ -5,8 +5,7 @@ const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPos
     const barYCoordinate = value > 0 ? zeroYCoordinate - height : zeroYCoordinate;
     const labelXCoordinate = (x + width/2) - labelWidth/2;
     const barHtml = `
-        <rect
-            class="chart__bar__rect ${ value < 0 ? ' chart__bar-negative' : '' }"
+        <rect class="chart__bar__rect"
             x="${x}"
             y="${barYCoordinate}"
             width="${width}"
@@ -27,7 +26,7 @@ const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPos
             </text>
         </g>`;
     return (
-        <g className={`chart__bar ${css}`} dangerouslySetInnerHTML={{ __html: barHtml }}></g>
+        <g className={`chart__bar ${css} ${ value < 0 ? ' chart__bar-negative' : '' }`} dangerouslySetInnerHTML={{ __html: barHtml }}></g>
     )
 }
 
@@ -39,13 +38,12 @@ Bar.propTypes = {
   width: React.PropTypes.number,
   height: React.PropTypes.number,
   labelPosition: React.PropTypes.string,
-  labelHeight: React.PropTypes.number,
+  labelWidth: React.PropTypes.number,
+  labelHeight: React.PropTypes.number
 };
 
 Bar.defaultProps = {
     width: 30,
-    axisSpacing: 25,
-    axisValues: ['125T', '100T', '75T', '50T', '25T', '0', '-25T'],
     labelHeight: 13,
 }
 
