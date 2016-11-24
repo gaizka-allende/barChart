@@ -1,20 +1,30 @@
 body {
 }
 
+#root {
+
+}
+
 .charts {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
+    width: 100vw;
+}
+
+.chart-container {
+    flex: 1;
+    width: 29%;
+    display: inline-flex;
+    margin: 0 2%;
 }
 
 .chart {
-    flex: 1;
+    width: 100%;
+    height: 100%;
     pointer-events: none; /* so that you can resize the element */
     display: block;
     position: relative;
     font-family: "Verdana";
-    font-size: 10px;
+    font-size: 1vw;
+
 }
 
 .chart-liquidity {
@@ -38,10 +48,11 @@ body {
 }
 
 .chart__line-light {
-    stroke: #717782;
+    stroke: #dee1e3;
 }
 
 .chart__line-dotted {
+    stroke: #565656;
     stroke-dasharray: 1, 1;
 }
 
@@ -71,7 +82,7 @@ body {
 }
 
 .chart__bar-current > rect {
-    fill: #29c6c6;
+    fill: #13acbe;
 }
 
 .chart__bar-stacked-1 > rect {
@@ -79,5 +90,5 @@ body {
 }
 
 .chart__bar-stacked-2 > rect {
-    fill: #91e2dd;
+    fill: #13acbe;
 }
