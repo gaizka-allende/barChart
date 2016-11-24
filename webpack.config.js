@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = {
   devtool: 'eval',
@@ -13,7 +14,8 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new CaseSensitivePathsPlugin()
   ],
   module: {
     loaders: [

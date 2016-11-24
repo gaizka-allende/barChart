@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import Grid from './Grid';
 
 const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currencySign, barLabelFont, children}) => {
-    const calculateBarHeight = (barValue) => Math.abs(barValue) * yAxisSpacing/unit;
     const getTextWidth =  (str, font) => {
         const canvas = document.createElement('canvas');
         let ctx = canvas.getContext("2d");
         ctx.font = font;
         return ctx.measureText(str).width;
     }
-    const viewBox = `0 0 ${width} ${height}`;
     const yAxisSpacing = height / yAxisValues.length;
-    const grid = <Grid width={width} yAxisValues={yAxisValues} yAxisSpacing={yAxisSpacing} currencySign={currencySign}/>;
     const zeroYCoordinate = yAxisValues
         .map((y, i) => ({
             y: (i+1)*yAxisSpacing,
@@ -19,37 +16,35 @@ const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currenc
         }))
         .filter(axisLine => axisLine.value === '0')[0].y;
     const nestedBars = Array.isArray(children) ? children : [children];
-    const bars = <g>{
-                    nestedBars.map( (childComponent,i) => {
-                        const x = width * childComponent.props.place;
-                        let props = { ...childComponent.props, zeroYCoordinate, x, key: `chart-bar-${i}`}
-                        switch (childComponent.type.name) {
-                            case 'Bar':
-                                const height = calculateBarHeight(childComponent.props.value);
-                                const labelText = childComponent.props.value.toLocaleString(locale, { style: 'currency', currency: currency });
-                                const labelWidth = getTextWidth(labelText, barLabelFont) + 5; // +5 hack for the currency sign
-                                props = { ...props, height, labelText, labelWidth };
-                                break;
-                            case 'StackedBars':
-                                const nestedBars = childComponent.props.children.map(nestedBar => {
-                                    const height = calculateBarHeight(nestedBar.props.value);
-                                    const labelText = nestedBar.props.value.toLocaleString(locale, { style: 'currency', currency: currency });
-                                    const labelWidth = getTextWidth(labelText, barLabelFont) + 5; // +5 hack for the currency sign
-                                    const nestedBarProps = {...nestedBar.props, height, labelText, labelWidth}
-                                    return <nestedBar.type {...nestedBarProps} />
-                                })
-                                props = { ...props, nestedBars }
-                                break;
-                            default:
-                                return null;
-                        }
-                        return <childComponent.type {...props} />
-                    } )
-                }</g>;
+    const bars = nestedBars.map( (childComponent,i) => {
+        const x = width * childComponent.props.place;
+        let props = { ...childComponent.props, zeroYCoordinate, x, key: `chart-bar-${i}`}
+        switch (childComponent.type.name) {
+            case 'Bar':
+                const height = Math.abs(childComponent.props.value) * yAxisSpacing/unit;
+                const labelText = childComponent.props.value.toLocaleString(locale, { style: 'currency', currency: currency });
+                const labelWidth = getTextWidth(labelText, barLabelFont) + 5; // +5 hack for the currency sign
+                props = { ...props, height, labelText, labelWidth };
+                break;
+            case 'StackedBars':
+                const nestedBars = childComponent.props.children.map(nestedBar => {
+                    const height = Math.abs(nestedBar.props.value) * yAxisSpacing/unit;
+                    const labelText = nestedBar.props.value.toLocaleString(locale, { style: 'currency', currency: currency });
+                    const labelWidth = getTextWidth(labelText, barLabelFont) + 5; // +5 hack for the currency sign
+                    const nestedBarProps = {...nestedBar.props, height, labelText, labelWidth}
+                    return <nestedBar.type {...nestedBarProps} />
+                })
+                props = { ...props, nestedBars }
+                break;
+            default:
+                return null;
+        }
+        return <childComponent.type {...props} />
+    } );
     return (
-        <svg className={`chart ${css}`} viewBox={viewBox}>
-            {grid}
-            {bars}
+        <svg className={`chart ${css}`} viewBox={`1 1 ${width} ${height}`}>
+            <Grid width={width} yAxisValues={yAxisValues} yAxisSpacing={yAxisSpacing} currencySign={currencySign}/>
+            <g>{bars}</g>
         </svg>
     )
 }

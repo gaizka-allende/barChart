@@ -13,10 +13,22 @@ body {
     pointer-events: none; /* so that you can resize the element */
     display: block;
     position: relative;
-    background: url("./img/graph-background-image.png") no-repeat center center;
     font-family: "Verdana";
     font-size: 10px;
 }
+
+.chart-liquidity {
+    background: url("./img/graph-background-image.png") no-repeat center center;
+}
+
+.chart-protection {
+    background: url("./img/graph-background-image.png") no-repeat center center;
+}
+
+.chart-growth {
+    background: url("./img/graph-background-image.png") no-repeat center center;
+}
+
 
 .chart__line-dark {
     stroke: #000000;
