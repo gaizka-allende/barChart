@@ -10,12 +10,11 @@ import styles from './App.css';
 
 
 const App = () => {
-
     return (
         <div className="charts">
             <div className="chart-container">
                 <Chart css="chart-liquidity">
-                    <Bar css={'chart__bar-desired'} value={46000} place={1/3} />
+                    <Bar css={'chart__bar-desired'} value={57000} place={1/3} />
                     <Bar css={'chart__bar-current'} value={12234.56} place={2/3} />
                 </Chart>
             </div>
@@ -32,7 +31,7 @@ const App = () => {
                 <Chart css="chart-growth">
                     <Bar css={'chart__bar-desired'} value={-8750.23} place={1/2} />
                 </Chart>
-            </div>    
+            </div>
         </div>
     )
 }

@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
     './src/index'

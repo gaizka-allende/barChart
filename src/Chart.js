@@ -7,7 +7,7 @@ const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currenc
         let ctx = canvas.getContext("2d");
         ctx.font = font;
         return ctx.measureText(str).width;
-    }
+    };
     const yAxisSpacing = height / yAxisValues.length;
     const zeroYCoordinate = yAxisValues
         .map((y, i) => ({
