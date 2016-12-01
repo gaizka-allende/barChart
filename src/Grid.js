@@ -25,7 +25,7 @@ const Grid = ({width, yAxisValues, yAxisSpacing, currencySign}) => (
             return (
                 <g className="chart__line"
                     key={`chart__line-${i}`}
-                    dangerouslySetInnerHTML={ { __html: gridLineInnerHtml }}>
+                    dangerouslySetInnerHTML={ {__html: gridLineInnerHtml} }>
                 </g>
             )
         })

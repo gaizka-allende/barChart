@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPosition, labelWidth, labelHeight}) => {
-    const barXCoordinate =  x - width/2;
     const barYCoordinate = value > 0 ? zeroYCoordinate - height : zeroYCoordinate;
     const labelXCoordinate = (x + width/2) - labelWidth/2;
     const barHtml = `

@@ -17,7 +17,7 @@ const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currenc
         .filter(axisLine => axisLine.value === '0')[0].y;
     const nestedBars = Array.isArray(children) ? children : [children];
     const bars = nestedBars.map( (childComponent,i) => {
-        const x = width * childComponent.props.place;
+        const x = (width - 40) * (i+1)/(nestedBars.length+1);
         let props = { ...childComponent.props, zeroYCoordinate, x, key: `chart-bar-${i}`}
         switch (childComponent.type.name) {
             case 'Bar':
