@@ -8,6 +8,7 @@ const StackedBars = ({x, zeroYCoordinate, nestedBars}) => {
         }
     }
     const bars = barChildren
+        .slice(0, 2)
         .map( (barComponent,i) => {
             let props = { ...barComponent.props, x, zeroYCoordinate };
             if (i === barChildren.length - 1 ) props.labelPosition = "bottom";
