@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
 
-const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currencySign, barLabelFont, children}) => {
+const Chart = ({className, width, height, unit, yAxisValues, locale, currency, currencySign, barLabelFont, children}) => {
     const getTextWidth =  (str, font) => {
         const canvas = document.createElement('canvas');
         let ctx = canvas.getContext("2d");
@@ -42,7 +42,7 @@ const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currenc
         return <childComponent.type {...props} />
     } );
     return (
-        <svg className={`chart ${css}`} viewBox={`1 1 ${width} ${height}`}>
+        <svg className={`chart ${className}`} viewBox={`1 1 ${width} ${height}`}>
             <Grid width={width} yAxisValues={yAxisValues} yAxisSpacing={yAxisSpacing} currencySign={currencySign}/>
             <g>{bars}</g>
         </svg>
@@ -50,7 +50,7 @@ const Chart = ({css, width, height, unit, yAxisValues, locale, currency, currenc
 }
 
 Chart.propTypes = {
-    css: React.PropTypes.string,
+    className: React.PropTypes.string,
     width: React.PropTypes.number,
     height: React.PropTypes.number
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPosition, labelWidth, labelHeight}) => {
+const Bar = ({className, value, x, zeroYCoordinate, width, height, labelText, labelPosition, labelWidth, labelHeight}) => {
     const barYCoordinate = value > 0 ? zeroYCoordinate - height : zeroYCoordinate;
     const labelXCoordinate = (x + width/2) - labelWidth/2;
     const barHtml = `
@@ -25,7 +25,7 @@ const Bar = ({css, value, x, zeroYCoordinate, width, height, labelText, labelPos
             </text>
         </g>`;
     return (
-        <g className={`chart__bar ${css} ${ value < 0 ? ' chart__bar-negative' : '' }`} dangerouslySetInnerHTML={{ __html: barHtml }}></g>
+        <g className={`chart__bar ${className} ${ value < 0 ? ' chart__bar-negative' : '' }`} dangerouslySetInnerHTML={{ __html: barHtml }}></g>
     )
 }
 
